@@ -1,3 +1,4 @@
+import Header from './components/Header'
 import './App.css'
 import mockData from './mockData.json'
 import genresData from './genresData.json'
@@ -12,9 +13,7 @@ function App() {
 
   return (
     <>
-      <div className='homeHeader'>
-        <h1>Search Movie App</h1>
-      </div>
+      <Header title='Search Movie App'/>
       <div className='formContent'>
         <div className='formGroup'>
           <label htmlFor='keyword'>Keyword</label>
