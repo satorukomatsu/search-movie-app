@@ -9,6 +9,7 @@ function SearchFormContent () {
           type='text'
           id='keyword'
           value=''
+          placeholder='Please input keyword to search for'
         />
       </div>
       <div className='formGroup'>
