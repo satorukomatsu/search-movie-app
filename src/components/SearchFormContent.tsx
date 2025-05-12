@@ -13,11 +13,6 @@ function SearchFormContent ({
   handleChangeYear,
   searchMovies
 }: Props) {
-    
-  const onClickSearch = async() => {
-    await searchMovies()
-  }
-
   const searchYears = ['2020', '2021', '2022', '2023', '2024']
 
   return (
@@ -46,7 +41,7 @@ function SearchFormContent ({
         </select>
       </div>
       <div className='searchButton'>
-        <button onClick={() => void onClickSearch()}>search</button>
+        <button onClick={() => void searchMovies()}>search</button>
       </div>
     </div>
   )
