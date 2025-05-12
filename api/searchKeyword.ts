@@ -51,14 +51,15 @@ export default async function handler(
   try {
     if (selectedYear) {
       const response = await fetch(
-        `${baseUrl}?api_key=${apiKey}&query=${keyword}&primary_release_year=${selectedYear}`
+        `${baseUrl}?api_key=${apiKey}&query=${keyword}&\
+        primary_release_year=${selectedYear}&language=ja`
       )
       const data = await response.json() as MovieResponse
       res.status(200).json(data)
       return
     }
     const response = await fetch(
-      `${baseUrl}?api_key=${apiKey}&query=${keyword}`
+      `${baseUrl}?api_key=${apiKey}&query=${keyword}&language=ja`
     )
     const data = await response.json() as MovieResponse
     res.status(200).json(data)
