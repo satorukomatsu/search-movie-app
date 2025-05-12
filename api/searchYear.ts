@@ -1,0 +1,52 @@
+import type { VercelRequest, VercelResponse } from '@vercel/node'
+
+interface Movie {
+  id: number;
+  title: string;
+  overview: string;
+  release_date: string;
+  poster_path: string | null;
+  backdrop_path: string | null;
+  vote_average: number;
+  vote_count: number;
+  genre_ids: number[];
+  original_language: string;
+  original_title: string;
+  popularity: number;
+  adult: boolean;
+  video: boolean;
+}
+
+interface MovieResponse {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+}
+
+export default async function handler(
+  req: VercelRequest,
+  res: VercelResponse
+) {
+  const selectedYear = req.query.selectedYear
+  const apiKey = process.env.TMDB_API_KEY
+  if (!apiKey) {
+    res.status(500).json({ error: 'TMDB_API_KEY is not set' })
+    return
+  }
+  if (typeof selectedYear !== 'string') {
+    res.status(500).json({ error: 'selected year is invalid value' })
+    return
+  }
+  const baseUrl = 'https://api.themoviedb.org/3/discover/movie'
+  try {
+    const response = await fetch(
+      `${baseUrl}?api_key=${apiKey}&primary_release_year=${selectedYear}`
+    )
+    const data = await response.json() as MovieResponse
+    res.status(200).json(data)
+    return
+  } catch(error) {
+    res.status(500).json({ error: error })
+  }
+}
