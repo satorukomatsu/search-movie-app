@@ -43,7 +43,7 @@ export default async function handler(
     res.status(500).json({ error: 'keyword is invalid value' })
     return
   }
-  if (typeof selectedYear !== 'string') {
+  if (selectedYear && typeof selectedYear !== 'string') {
     res.status(500).json({ error: 'selected year is invalid value' })
     return
   }
