@@ -77,7 +77,7 @@ function App() {
         handleChangeYear={handleChangeYear}
         searchMovies={searchMovies}
       />
-      <MovieListContents/>
+      <MovieListContents movieList={movieList}/>
       <LoadMoreButton/>
     </>
   )

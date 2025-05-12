@@ -4,7 +4,7 @@ interface Props {
   result: {
     id: number
     title: string
-    poster_path: string
+    poster_path: string | null
     genre_ids: number[]
     release_date: string
   }
@@ -16,10 +16,11 @@ interface Genre {
 }
 
 function MovieDetail ({result}: Props) {
+  const posterPath = result.poster_path ?? ''
   return (
     <div className='movieDetail'>
       <h3>{result.title}</h3>
-      <img className='movieImg' src={`https://image.tmdb.org/t/p/original${result.poster_path}`} alt={result.title}/>
+      <img className='movieImg' src={`https://image.tmdb.org/t/p/original${posterPath}`} alt={result.title}/>
       <p>
         ジャンル: {
           result.genre_ids.length ?
