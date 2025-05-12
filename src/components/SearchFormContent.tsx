@@ -1,8 +1,22 @@
-import { useState } from 'react'
+interface Props {
+  keyword: string
+  selectedYear: string
+  handleChangeKeyword: (keyword: string) => void
+  handleChangeYear: (selectedYear: string) => void
+  searchMovies: () => Promise<void>
+}
 
-function SearchFormContent () {
-  const [keyword, setKeyword] = useState('')
-  const [selectedYear, setSelectedYear] = useState('')
+function SearchFormContent ({
+  keyword,
+  selectedYear,
+  handleChangeKeyword,
+  handleChangeYear,
+  searchMovies
+}: Props) {
+    
+  const onClickSearch = async() => {
+    await searchMovies()
+  }
 
   const searchYears = ['2020', '2021', '2022', '2023', '2024']
 
@@ -15,7 +29,7 @@ function SearchFormContent () {
           id='keyword'
           value={keyword}
           placeholder='Please input keyword to search for'
-          onChange={(e) => { setKeyword(e.target.value) }}
+          onChange={(e) => { handleChangeKeyword(e.target.value) }}
         />
       </div>
       <div className='formGroup'>
@@ -23,7 +37,7 @@ function SearchFormContent () {
         <select
           id='releaseYear'
           value={selectedYear}
-          onChange={(e) => { setSelectedYear(e.target.value) }}
+          onChange={(e) => { handleChangeYear(e.target.value) }}
         >
           <option value=''>---Please select year---</option>
           {searchYears.map((year) => {
@@ -32,7 +46,7 @@ function SearchFormContent () {
         </select>
       </div>
       <div className='searchButton'>
-        <button>search</button>
+        <button onClick={() => void onClickSearch()}>search</button>
       </div>
     </div>
   )
