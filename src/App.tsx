@@ -33,6 +33,8 @@ function App() {
   const [movieList, setMovieList] = useState<Movie[] | null>(null)
   const [keyword, setKeyword] = useState('')
   const [selectedYear, setSelectedYear] = useState('')
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
 
   const handleChangeKeyword = (value: string) => {
     setKeyword(value)
@@ -48,6 +50,7 @@ function App() {
       return
     }
     try {
+      setCurrentPage(0)
       if (keyword) {
         const query = selectedYear ?
           `keyword=${keyword}&selectedYear=${selectedYear}` :
@@ -55,11 +58,45 @@ function App() {
         const res = await fetch(`/api/searchKeyword?${query}`)
         const responseData = await res.json() as MovieResponse
         setMovieList(responseData.results)
+        setCurrentPage(responseData.page)
+        setTotalPages(responseData.total_pages)
         return
       }
       const res = await fetch(`/api/searchYear?selectedYear=${selectedYear}`)
       const responseData = await res.json() as MovieResponse
       setMovieList(responseData.results)
+      setCurrentPage(responseData.page)
+      setTotalPages(responseData.total_pages)
+      return
+    } catch(error) {
+      alert('エラーが発生しました。更新し再度実行してください。')
+      console.error(error)
+    }
+  }
+
+  const loadMoreMovie = async() => {
+    const nextPage = currentPage + 1
+    try {
+      if (keyword) {
+        const query = selectedYear ?
+          `keyword=${keyword}&selectedYear=${selectedYear}&page=${String(nextPage)}` :
+          `keyword=${keyword}&page=${String(nextPage)}`
+        const res = await fetch(`/api/searchKeyword?${query}`)
+        const responseData = await res.json() as MovieResponse
+        const movieListDeepCopy = JSON.parse(JSON.stringify(movieList)) as Movie[]
+        const newMovieList = movieListDeepCopy.concat(responseData.results)
+        setMovieList(newMovieList)
+        setCurrentPage(nextPage)
+        return
+      }
+      const res = await fetch(
+        `/api/searchYear?selectedYear=${selectedYear}&page=${String(nextPage)}`
+      )
+      const responseData = await res.json() as MovieResponse
+      const movieListDeepCopy = JSON.parse(JSON.stringify(movieList)) as Movie[]
+      const newMovieList = movieListDeepCopy.concat(responseData.results)
+      setMovieList(newMovieList)
+      setCurrentPage(nextPage)
       return
     } catch(error) {
       alert('エラーが発生しました。更新し再度実行してください。')
@@ -78,7 +115,11 @@ function App() {
         searchMovies={searchMovies}
       />
       <MovieListContents movieList={movieList}/>
-      <LoadMoreButton/>
+      <LoadMoreButton
+        currentPage={currentPage}
+        totalPages={totalPages}
+        loadMore={loadMoreMovie}
+      />
     </>
   )
 }
