@@ -4,6 +4,7 @@ import SearchFormContent from './components/SearchFormContent'
 import MovieListContents from './components/MovieListContents'
 import LoadMoreButton from './components/LoadMoreButton'
 import './App.css'
+import Loading from './components/Loading'
 
 interface Movie {
   id: number;
@@ -35,6 +36,7 @@ function App() {
   const [selectedYear, setSelectedYear] = useState('')
   const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
+  const [show, setShow] = useState(true)
 
   const handleChangeKeyword = (value: string) => {
     setKeyword(value)
@@ -51,6 +53,7 @@ function App() {
     }
     try {
       setCurrentPage(0)
+      setShow(false)
       if (keyword) {
         const query = selectedYear ?
           `keyword=${keyword}&selectedYear=${selectedYear}` :
@@ -60,6 +63,7 @@ function App() {
         setMovieList(responseData.results)
         setCurrentPage(responseData.page)
         setTotalPages(responseData.total_pages)
+        setShow(true)
         return
       }
       const res = await fetch(`/api/searchYear?selectedYear=${selectedYear}`)
@@ -67,6 +71,7 @@ function App() {
       setMovieList(responseData.results)
       setCurrentPage(responseData.page)
       setTotalPages(responseData.total_pages)
+      setShow(true)
       return
     } catch(error) {
       alert('エラーが発生しました。更新し再度実行してください。')
@@ -76,6 +81,7 @@ function App() {
 
   const loadMoreMovie = async() => {
     const nextPage = currentPage + 1
+    setShow(false)
     try {
       if (keyword) {
         const query = selectedYear ?
@@ -87,6 +93,7 @@ function App() {
         const newMovieList = movieListDeepCopy.concat(responseData.results)
         setMovieList(newMovieList)
         setCurrentPage(nextPage)
+        setShow(true)
         return
       }
       const res = await fetch(
@@ -97,6 +104,7 @@ function App() {
       const newMovieList = movieListDeepCopy.concat(responseData.results)
       setMovieList(newMovieList)
       setCurrentPage(nextPage)
+      setShow(true)
       return
     } catch(error) {
       alert('エラーが発生しました。更新し再度実行してください。')
@@ -114,7 +122,14 @@ function App() {
         handleChangeYear={handleChangeYear}
         searchMovies={searchMovies}
       />
-      <MovieListContents movieList={movieList}/>
+      {show || currentPage > 0 ?
+        <MovieListContents movieList={movieList}/> :
+        null
+      }
+      {show ?
+        null :
+        <Loading/>
+      }
       <LoadMoreButton
         currentPage={currentPage}
         totalPages={totalPages}
