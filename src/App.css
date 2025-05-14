@@ -5,38 +5,101 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.homeHeader {
+  display: flex;
+  justify-content: left;
+  width: 100%;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.formContent {
+  display: flex;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-right: 1em;
+}
+
+#keyword {
+  width: 220px;
+}
+
+#releaseYear {
+  height: 21.5px;
+}
+
+.searchButton {
+  display: flex;
+  align-items: end;
+}
+
+.movieListContents {
+  max-width: calc(1280px - 4rem);
+  width: calc(100vw - 4rem); /* rootのpadding分差し引き */
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+
+.loading {
+  justify-content: center;
+}
+
+.movieDetail {
+  max-width: calc((1280px - 4rem - 8em) / 4);
+  width: calc((100vw - 4rem - 8em) / 4); /* rootのpaddingとカードのmargin分差し引き */
+  margin: 0.5em;
+  padding: 0.5em;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: start;
+  font-size: 0.8em;
+  background-color: #eaeaea;
+  border-radius: 10px;
+}
+
+.movieImg {
+  max-width: calc((1280px - 4rem - 8em) / 4);
+  width: calc((100vw - 4rem - 8em) / 4); /* カードの長さに合わせる　*/
+}
+
+@media screen and (max-width: 960px) {
+  .formContent {
+    flex-direction: column;
   }
-  to {
-    transform: rotate(360deg);
+
+  .formGroup {
+    margin-bottom: 1em;
+  }
+
+  .movieDetail h3 {
+    font-size: 1.1em;
+  }
+
+  .movieDetail p {
+    font-size: 0.8em;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media screen and (max-width: 700px) {
+  .formContent {
+    flex-direction: column;
   }
-}
 
-.card {
-  padding: 2em;
-}
+  .formGroup {
+    margin-bottom: 1em;
+  }
 
-.read-the-docs {
-  color: #888;
+
+  .movieDetail h3 {
+    font-size: 0.7em;
+  }
+
+  .movieDetail p {
+    font-size: 6px;
+  }
 }

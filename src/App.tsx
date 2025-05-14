@@ -1,33 +1,119 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Header from './components/Header'
+import SearchFormContent from './components/SearchFormContent'
+import MovieListContents from './components/MovieListContents'
+import LoadMoreButton from './components/LoadMoreButton'
 import './App.css'
+import Loading from './components/Loading'
+import type { Movie, MovieResponse } from './types/movie'
+import string from './const/string'
+import errorMsg from './const/errorMsg'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [movieList, setMovieList] = useState<Movie[] | null>(null)
+  const [keyword, setKeyword] = useState('')
+  const [selectedYear, setSelectedYear] = useState('')
+  const [totalPages, setTotalPages] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [show, setShow] = useState(true)
+
+  const handleChangeKeyword = (value: string) => {
+    setKeyword(value)
+  }
+
+  const handleChangeYear = (value: string) => {
+    setSelectedYear(value)
+  }
+
+  const searchMovies = async() => {
+    if (!keyword && !selectedYear) {
+      alert(errorMsg.NO_KEYWORD_AND_YEAR)
+      return
+    }
+    try {
+      setCurrentPage(0)
+      setShow(false)
+      if (keyword) {
+        const query = selectedYear ?
+          `keyword=${keyword}&selectedYear=${selectedYear}` :
+          `keyword=${keyword}`
+        const res = await fetch(`/api/searchKeyword?${query}`)
+        const responseData = await res.json() as MovieResponse
+        setMovieList(responseData.results)
+        setCurrentPage(responseData.page)
+        setTotalPages(responseData.total_pages)
+        setShow(true)
+        return
+      }
+      const res = await fetch(`/api/searchYear?selectedYear=${selectedYear}`)
+      const responseData = await res.json() as MovieResponse
+      setMovieList(responseData.results)
+      setCurrentPage(responseData.page)
+      setTotalPages(responseData.total_pages)
+      setShow(true)
+      return
+    } catch(error) {
+      alert(errorMsg.ERROR_OCCURED)
+      console.error(error)
+    }
+  }
+
+  const loadMoreMovie = async() => {
+    const nextPage = currentPage + 1
+    setShow(false)
+    try {
+      if (keyword) {
+        const query = selectedYear ?
+          `keyword=${keyword}&selectedYear=${selectedYear}&page=${String(nextPage)}` :
+          `keyword=${keyword}&page=${String(nextPage)}`
+        const res = await fetch(`/api/searchKeyword?${query}`)
+        const responseData = await res.json() as MovieResponse
+        const movieListDeepCopy = JSON.parse(JSON.stringify(movieList)) as Movie[]
+        const newMovieList = movieListDeepCopy.concat(responseData.results)
+        setMovieList(newMovieList)
+        setCurrentPage(nextPage)
+        setShow(true)
+        return
+      }
+      const res = await fetch(
+        `/api/searchYear?selectedYear=${selectedYear}&page=${String(nextPage)}`
+      )
+      const responseData = await res.json() as MovieResponse
+      const movieListDeepCopy = JSON.parse(JSON.stringify(movieList)) as Movie[]
+      const newMovieList = movieListDeepCopy.concat(responseData.results)
+      setMovieList(newMovieList)
+      setCurrentPage(nextPage)
+      setShow(true)
+      return
+    } catch(error) {
+      alert(errorMsg.ERROR_OCCURED)
+      console.error(error)
+    }
+  }
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <Header title={string.HEADER_TITLE}/>
+      <SearchFormContent 
+        keyword={keyword}
+        selectedYear={selectedYear}
+        handleChangeKeyword={handleChangeKeyword}
+        handleChangeYear={handleChangeYear}
+        searchMovies={searchMovies}
+      />
+      {show || currentPage > 0 ?
+        <MovieListContents movieList={movieList}/> :
+        null
+      }
+      {show ?
+        null :
+        <Loading/>
+      }
+      <LoadMoreButton
+        currentPage={currentPage}
+        totalPages={totalPages}
+        loadMore={loadMoreMovie}
+      />
     </>
   )
 }
