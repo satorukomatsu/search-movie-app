@@ -32,7 +32,7 @@ function MovieDetail ({result}: Props) {
       </p>
       <p>
         {
-          result.genre_ids.length && genresData ?
+          result.genre_ids.length && genresData?.genres ?
             result.genre_ids.map((genreId, index) => {
               const genre = genresData.genres.find((genre: Genre) => {
                 return genre.id === genreId
