@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/max-len */
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 
 interface Movie {
@@ -52,10 +53,8 @@ export default async function handler(
   try {
     if (selectedYear) {
       const url = page && typeof page === 'string' ?
-        `${baseUrl}?api_key=${apiKey}&query=${keyword}&\
-        primary_release_year=${selectedYear}&language=ja&page=${page}` :
-        `${baseUrl}?api_key=${apiKey}&query=${keyword}&\
-        primary_release_year=${selectedYear}&language=ja`
+        `${baseUrl}?api_key=${apiKey}&query=${keyword}&primary_release_year=${selectedYear}&language=ja&page=${page}` :
+        `${baseUrl}?api_key=${apiKey}&query=${keyword}&primary_release_year=${selectedYear}&language=ja`
       const response = await fetch(url)
       const data = await response.json() as MovieResponse
       res.status(200).json(data)
