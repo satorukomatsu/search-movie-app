@@ -1,4 +1,4 @@
-import genresData from '../genresData.json'
+import { useGenre } from './GenreContext'
 
 interface Props {
   result: {
@@ -17,6 +17,7 @@ interface Genre {
 
 function MovieDetail ({result}: Props) {
   const posterPath = result.poster_path ?? ''
+  const {genresData} = useGenre()
   return (
     <div className='movieDetail'>
       <h3>{result.title}</h3>
@@ -34,7 +35,7 @@ function MovieDetail ({result}: Props) {
       </p>
       <p>
         {
-          result.genre_ids.length ?
+          result.genre_ids.length && genresData ?
             result.genre_ids.map((genreId, index) => {
               const genre = genresData.genres.find((genre: Genre) => {
                 return genre.id === genreId
