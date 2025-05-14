@@ -1,13 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-
-interface Genre {
-  id: number
-  name: string
-}
-  
-interface GenreData {
-  genres: Genre[]
-}
+import type { GenreData } from '../src/types/movie'
 
 export default async function handler(
   req: VercelRequest,

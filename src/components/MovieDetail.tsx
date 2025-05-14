@@ -1,4 +1,5 @@
 import { useGenre } from './GenreContext'
+import type { Genre } from '../types/movie'
 
 interface Props {
   result: {
@@ -8,11 +9,6 @@ interface Props {
     genre_ids: number[]
     release_date: string
   }
-}
-
-interface Genre {
-  id: number
-  name: string
 }
 
 function MovieDetail ({result}: Props) {

@@ -1,13 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-
-interface Genre {
-  id: number
-  name: string
-}
-
-interface GenreData {
-  genres: Genre[]
-}
+import type { GenreData } from '../types/movie'
 
 interface GenreDataProps {
   genresData: GenreData | null
