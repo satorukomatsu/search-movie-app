@@ -22,7 +22,18 @@ function MovieDetail ({result}: Props) {
       <h3>{result.title}</h3>
       <img className='movieImg' src={`https://image.tmdb.org/t/p/original${posterPath}`} alt={result.title}/>
       <p>
-        ジャンル: {
+        {
+          result.release_date ?
+            new Date(result.release_date).toLocaleDateString('ja-JP', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            }) :
+            '情報なし'
+        }
+      </p>
+      <p>
+        {
           result.genre_ids.length ?
             result.genre_ids.map((genreId, index) => {
               const genre = genresData.genres.find((genre: Genre) => {
@@ -34,17 +45,6 @@ function MovieDetail ({result}: Props) {
                   {result.genre_ids.length - 1 > index ? ', ' : ''}
                 </span>
               )
-            }) :
-            '情報なし'
-        }
-      </p>
-      <p>
-        リリース: {
-          result.release_date ?
-            new Date(result.release_date).toLocaleDateString('ja-JP', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
             }) :
             '情報なし'
         }
