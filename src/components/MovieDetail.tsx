@@ -1,5 +1,6 @@
 import { useGenre } from './GenreContext'
 import type { Genre } from '../types/movie'
+import string from '../const/string'
 
 interface Props {
   result: {
@@ -26,7 +27,7 @@ function MovieDetail ({result}: Props) {
               month: 'long',
               day: 'numeric'
             }) :
-            '情報なし'
+            string.NO_INFO
         }
       </p>
       <p>
@@ -43,7 +44,7 @@ function MovieDetail ({result}: Props) {
                 </span>
               )
             }) :
-            '情報なし'
+            string.NO_INFO
         }
       </p>
     </div>

@@ -1,7 +1,9 @@
+import string from '../const/string'
+
 function Loading () {
   return (
     <div className='movieListContents loading'>
-      <p>Loading...</p>
+      <p>{string.LOADING}</p>
     </div>
   )
 }

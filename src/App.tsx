@@ -6,6 +6,8 @@ import LoadMoreButton from './components/LoadMoreButton'
 import './App.css'
 import Loading from './components/Loading'
 import type { Movie, MovieResponse } from './types/movie'
+import string from './const/string'
+import errorMsg from './const/errorMsg'
 
 function App() {
   const [movieList, setMovieList] = useState<Movie[] | null>(null)
@@ -25,7 +27,7 @@ function App() {
 
   const searchMovies = async() => {
     if (!keyword && !selectedYear) {
-      alert('映画名とリリース年が入力されていません。入力内容を確認し再度実行してください。')
+      alert(errorMsg.NO_KEYWORD_AND_YEAR)
       return
     }
     try {
@@ -51,7 +53,7 @@ function App() {
       setShow(true)
       return
     } catch(error) {
-      alert('エラーが発生しました。更新し再度実行してください。')
+      alert(errorMsg.ERROR_OCCURED)
       console.error(error)
     }
   }
@@ -84,14 +86,14 @@ function App() {
       setShow(true)
       return
     } catch(error) {
-      alert('エラーが発生しました。更新し再度実行してください。')
+      alert(errorMsg.ERROR_OCCURED)
       console.error(error)
     }
   }
 
   return (
     <>
-      <Header title='Search Movie App'/>
+      <Header title={string.HEADER_TITLE}/>
       <SearchFormContent 
         keyword={keyword}
         selectedYear={selectedYear}

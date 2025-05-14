@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import type { GenreData } from '../types/movie'
+import errorMsg from '../const/errorMsg'
 
 interface GenreDataProps {
   genresData: GenreData | null
@@ -10,7 +11,7 @@ const GenreContext = createContext<GenreDataProps | undefined>(undefined)
 export const useGenre = () => {
   const context = useContext(GenreContext)
   if (!context) {
-    throw new Error('useUser must be used within UserProvider')
+    throw new Error(errorMsg.MUST_USE_PROVIDER)
   }
   return context
 }

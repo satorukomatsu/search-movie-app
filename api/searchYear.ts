@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import type { MovieResponse } from '../src/types/movie'
+import errorMsg from '../src/const/errorMsg'
 
 export default async function handler(
   req: VercelRequest,
@@ -9,11 +10,11 @@ export default async function handler(
   const page = req.query.page
   const apiKey = process.env.TMDB_API_KEY
   if (!apiKey) {
-    res.status(500).json({ error: 'TMDB_API_KEY is not set' })
+    res.status(500).json({ error: errorMsg.API_KEY_NOT_SET })
     return
   }
   if (typeof selectedYear !== 'string') {
-    res.status(500).json({ error: 'selected year is invalid value' })
+    res.status(500).json({ error: errorMsg.INVALID_SELECTED_YEAR })
     return
   }
   const baseUrl = 'https://api.themoviedb.org/3/discover/movie'
