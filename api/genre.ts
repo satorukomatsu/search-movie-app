@@ -3,7 +3,7 @@ import type { GenreData } from '../src/types/movie'
 import errorMsg from '../src/const/errorMsg'
 
 export default async function handler(
-  req: VercelRequest,
+  _req: VercelRequest,
   res: VercelResponse
 ) {
   const apiKey = process.env.TMDB_API_KEY
